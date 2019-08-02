@@ -1,0 +1,57 @@
+"""This is my attempt at a Caesar Cipher based on what I learned from Cracking Codes With Python
+I wanted to see if I could have the user input their message while also randomizing my key rather than hardcoding it
+So, we'll see how this goes. This is more me building off a basic variant to see what I could customize."""
+import random
+
+#I like my constants at the start
+SYMBOLS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890-=!@#$%^&*()_+,./;\'[]\\<>?:"{}| '
+
+keyIndex = len(SYMBOLS) #I'll end up using this to account for wraparound.
+
+anotherMessage = True
+
+while anotherMessage: #let's have fun and give the user a chance to encrypt more messages
+    #I want to have the user input a message
+    userMessage = input('Please enter your message: ')
+
+    #let's use a random key
+    key = random.randrange(1, keyIndex)
+    print(key) #I just want to see if this stayed in my range
+
+    #placeholder
+    encryptedMessage = ''
+
+    for symbol in userMessage:
+        if symbol in SYMBOLS:
+            symbolIndex = SYMBOLS.find(symbol)
+
+            encryptedIndex = symbolIndex + key
+
+            if encryptedIndex >= keyIndex:
+                encryptedIndex = encryptedIndex - keyIndex
+
+            encryptedMessage += SYMBOLS[encryptedIndex]
+
+    print(encryptedMessage)
+
+    decryptMode = input('Would you like to decrypt your message? (y/n) ')
+
+    decryptedMessage = ''
+
+    if decryptMode == 'y':
+        for symbol in encryptedMessage:
+            if symbol in SYMBOLS:
+                symbolIndex = SYMBOLS.find(symbol)
+
+                decryptedIndex = symbolIndex - key
+
+                if decryptedIndex < 0:
+                    decryptedIndex = decryptedIndex + keyIndex
+
+                decryptedMessage += SYMBOLS[decryptedIndex]
+
+    print(decryptedMessage)
+    promptUser = input('Would you like to encrypt another message? (y/n) ')
+
+    if promptUser == 'n':
+        anotherMessage = False
